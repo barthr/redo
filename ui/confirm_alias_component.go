@@ -16,6 +16,7 @@ type ConfirmAliasComponent struct {
 	err       error
 	finalized bool
 	selected  []list.Item
+	quit      bool
 }
 
 func newConfirmAliasComponent(selected []list.Item) tea.Model {
@@ -38,7 +39,10 @@ func (c ConfirmAliasComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.Type {
-		case tea.KeyEnter, tea.KeyCtrlC, tea.KeyEsc:
+		case tea.KeyEscape, tea.KeyCtrlC:
+			c.quit = true
+			return c, tea.Quit
+		case tea.KeyEnter:
 			c.finalized = true
 			return c, tea.Quit
 		}
@@ -52,6 +56,9 @@ func (c ConfirmAliasComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (c ConfirmAliasComponent) View() string {
+	if c.quit {
+		return ""
+	}
 	if !c.finalized {
 		return fmt.Sprintf(
 			"What’s the name of the alias?\n\n%s\n\n%s",
