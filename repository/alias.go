@@ -47,11 +47,7 @@ func InitAliasRepository(aliasFile string) {
 	if err != nil {
 		log.Fatalf("Failed opening alias file: %s: %s", aliasFile, err)
 	}
-	parser, err := syntax.NewParser().Parse(file, "")
-	if err != nil {
-		log.Fatalf("Failed parsing alias file: %s: %s", aliasFile, err)
-	}
-	aliasRepository = &AliasRepository{templateFile: file, parser: parser}
+	aliasRepository = &AliasRepository{templateFile: file}
 }
 
 func (ar *AliasRepository) Create(alias Alias) error {
@@ -63,11 +59,6 @@ func (ar *AliasRepository) Create(alias Alias) error {
 		"Alias":     alias,
 		"Timestamp": time.Now().Format(time.RFC3339),
 	})
-	if err != nil {
-		return err
-	}
-
-	ar.parser, err = syntax.NewParser().Parse(ar.templateFile, "")
 	return err
 }
 
@@ -101,13 +92,13 @@ func (ar *AliasRepository) Exists(aliasName string) (bool, error) {
 	return false, nil
 }
 
-func (ar *AliasRepository) GetAll() ([]string, error) {
-	return ar.functionDeclarations()
-}
-
 func (ar *AliasRepository) functionDeclarations() ([]string, error) {
+	parser, err := syntax.NewParser().Parse(ar.templateFile, "")
+	if err != nil {
+		return nil, err
+	}
 	var result []string
-	syntax.Walk(ar.parser, func(node syntax.Node) bool {
+	syntax.Walk(parser, func(node syntax.Node) bool {
 		switch node.(type) {
 		case *syntax.FuncDecl:
 			decl := node.(*syntax.FuncDecl)
