@@ -4,7 +4,6 @@ import (
 	"bytes"
 	_ "embed"
 	"fmt"
-	"io"
 	"log"
 	"mvdan.cc/sh/v3/syntax"
 	"os"
@@ -34,12 +33,11 @@ var functionTemplate = template.Must(template.New("function").Parse(`
 `))
 
 type AliasRepository struct {
-	templateFile io.ReadWriteCloser
-	parser       *syntax.File
+	aliasFile *os.File
 }
 
 func Close() {
-	aliasRepository.templateFile.Close()
+	aliasRepository.aliasFile.Close()
 }
 
 func InitAliasRepository(aliasFile string) {
@@ -47,7 +45,7 @@ func InitAliasRepository(aliasFile string) {
 	if err != nil {
 		log.Fatalf("Failed opening alias file: %s: %s", aliasFile, err)
 	}
-	aliasRepository = &AliasRepository{templateFile: file}
+	aliasRepository = &AliasRepository{aliasFile: file}
 }
 
 func (ar *AliasRepository) Create(alias Alias) error {
@@ -55,7 +53,7 @@ func (ar *AliasRepository) Create(alias Alias) error {
 	if err != nil {
 		return err
 	}
-	err = functionTemplate.Execute(ar.templateFile, map[string]interface{}{
+	err = functionTemplate.Execute(ar.aliasFile, map[string]interface{}{
 		"Alias":     alias,
 		"Timestamp": time.Now().Format(time.RFC3339),
 	})
@@ -93,7 +91,7 @@ func (ar *AliasRepository) Exists(aliasName string) (bool, error) {
 }
 
 func (ar *AliasRepository) functionDeclarations() ([]string, error) {
-	parser, err := syntax.NewParser().Parse(ar.templateFile, "")
+	parser, err := syntax.NewParser().Parse(ar.aliasFile, "")
 	if err != nil {
 		return nil, err
 	}
