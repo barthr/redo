@@ -10,6 +10,7 @@ import (
 )
 
 var quitTextStyle = lipgloss.NewStyle().Margin(1, 0, 2, 2)
+var infoTextStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("170"))
 
 type ConfirmAliasComponent struct {
 	textInput textinput.Model
@@ -88,5 +89,7 @@ func (c ConfirmAliasComponent) View() string {
 		Commands: commands,
 	})
 
-	return quitTextStyle.Render(fmt.Sprintf("Successfully added aliasName: %s\n\n %s", aliasName, function))
+	infoText := infoTextStyle.Render(fmt.Sprintf("Successfully added aliasName: %s\nPlease source your alias file to make your alias active in the current shell \n\n$ source $(redo alias-file)", aliasName))
+	// source the bash function
+	return quitTextStyle.Render(fmt.Sprintf("%s\n %s", infoText, function))
 }
