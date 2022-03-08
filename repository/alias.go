@@ -2,8 +2,6 @@ package repository
 
 import (
 	"bytes"
-	_ "embed"
-	"fmt"
 	"log"
 	"mvdan.cc/sh/v3/syntax"
 	"os"
@@ -37,7 +35,9 @@ type AliasRepository struct {
 }
 
 func Close() {
-	aliasRepository.aliasFile.Close()
+	if err := aliasRepository.aliasFile.Close(); err != nil {
+		log.Fatalf("Failed to close alias file: %v", err)
+	}
 }
 
 func InitAliasRepository(aliasFile string) {
@@ -81,7 +81,6 @@ func (ar *AliasRepository) Exists(aliasName string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	fmt.Println(declarations)
 	for _, declaration := range declarations {
 		if declaration == aliasName {
 			return true, nil
