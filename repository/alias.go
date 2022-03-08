@@ -5,6 +5,7 @@ import (
 	"log"
 	"mvdan.cc/sh/v3/syntax"
 	"os"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -24,8 +25,7 @@ type Alias struct {
 
 var functionTemplate = template.Must(template.New("function").Parse(`
 # Generated on {{ .Timestamp }}.
-{{ .Alias.Name }}() {
-    {{ range .Alias.Commands }}
+{{ .Alias.Name }}() { {{ range .Alias.Commands }}
     {{ . }}{{ end }}
 }
 `))
@@ -48,31 +48,33 @@ func InitAliasRepository(aliasFile string) {
 	aliasRepository = &AliasRepository{aliasFile: file}
 }
 
-func (ar *AliasRepository) Create(alias Alias) error {
-	err := ar.validateFunction(alias)
+func (ar *AliasRepository) Create(alias Alias) (string, error) {
+	function, err := ar.generateFunction(alias)
 	if err != nil {
-		return err
+		return "", err
+	}
+	err = ar.validateFunction(function)
+	if err != nil {
+		return "", err
 	}
 	err = functionTemplate.Execute(ar.aliasFile, map[string]interface{}{
 		"Alias":     alias,
 		"Timestamp": time.Now().Format(time.RFC3339),
 	})
-	return err
+	return function, err
 }
 
-func (ar *AliasRepository) validateFunction(alias Alias) error {
+func (ar *AliasRepository) generateFunction(alias Alias) (string, error) {
 	buffer := &bytes.Buffer{}
 	err := functionTemplate.Execute(buffer, map[string]interface{}{
 		"Alias":     alias,
 		"Timestamp": time.Now().Format(time.RFC3339),
 	})
-	if err != nil {
-		return err
-	}
-	_, err = syntax.NewParser().Parse(buffer, "")
-	if err != nil {
-		return err
-	}
+	return buffer.String(), err
+}
+
+func (ar *AliasRepository) validateFunction(function string) error {
+	_, err := syntax.NewParser().Parse(strings.NewReader(function), "")
 	return err
 }
 

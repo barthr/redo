@@ -82,10 +82,11 @@ func (c ConfirmAliasComponent) View() string {
 		commands = append(commands, historyItem.(*HistoryItem).Command)
 	}
 
-	c.err = repository.GetAliasRepository().Create(repository.Alias{
+	var function string
+	function, c.err = repository.GetAliasRepository().Create(repository.Alias{
 		Name:     aliasName,
 		Commands: commands,
 	})
-	return quitTextStyle.Render("Successfully added aliasName: " + aliasName)
 
+	return quitTextStyle.Render(fmt.Sprintf("Successfully added aliasName: %s\n\n %s", aliasName, function))
 }

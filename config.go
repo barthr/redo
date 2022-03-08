@@ -16,12 +16,14 @@ type Config struct {
 	AliasPath   string
 	ConfigDir   string
 	HistoryPath string
+	Editor      string
 }
 
 func (c *Config) FromEnv() {
 	c.AliasPath = os.Getenv("REDO_ALIAS_PATH")
 	c.ConfigDir = os.Getenv("REDO_CONFIG_PATH")
 	c.HistoryPath = os.Getenv("REDO_HISTORY_PATH")
+	c.Editor = os.Getenv("REDO_EDITOR")
 
 	const defaultRedoConfigDir = "/redo"
 	if c.ConfigDir == "" {
@@ -33,6 +35,9 @@ func (c *Config) FromEnv() {
 	}
 	if c.HistoryPath == "" {
 		c.HistoryPath = os.Getenv("HISTFILE")
+	}
+	if c.Editor == "" {
+		c.Editor = os.Getenv("EDITOR")
 	}
 }
 
