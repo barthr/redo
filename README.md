@@ -41,7 +41,7 @@ tar -xf <downloaded_archive> redo && sudo mv redo /usr/local/bin
 go install github.com/barthr/redo@latest
 ```
 
-After downloading add the following line to your ~/.bashrc or ~/.zshrc
+*After downloading add the following line to your* `~/.bashrc` or `~/.zshrc`
 ```bash
 source $(redo alias-file)
 ```
