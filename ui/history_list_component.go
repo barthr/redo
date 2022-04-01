@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -32,6 +33,12 @@ func NewHistoryItemListComponent(items []list.Item) *HistoryItemListComponent {
 	l.Styles.Title = titleStyle
 	l.Styles.PaginationStyle = paginationStyle
 	l.Styles.HelpStyle = helpStyle
+	l.AdditionalShortHelpKeys = func() []key.Binding {
+		return []key.Binding{
+			key.NewBinding(key.WithHelp("space", "toggle item")),
+			key.NewBinding(key.WithHelp("enter", "confirm selection")),
+		}
+	}
 
 	return &HistoryItemListComponent{list: l}
 }
