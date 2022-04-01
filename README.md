@@ -1,7 +1,8 @@
 # Redo
 
 Redo is a command line application to easily create reusable functions in your own shell. Think of redo like an
-interactive way combine multiple commands from history in a single command.
+interactive way combine multiple commands from your shell history in a single command. This can be handy for quickly
+re-doing multiple commands for example deleting and starting a new docker container.
 
 <p align="center">
   <img src="https://github.com/barthr/redo/blob/master/docs/demo.gif" width="90%" height="90%" />
@@ -13,6 +14,7 @@ interactive way combine multiple commands from history in a single command.
     * [Install from source](#install-from-source)
 * [Quickstart](#quickstart)
 * [Configuration](#configuration)
+* [Shortcuts](#shortcuts)
 * [Roadmap](#roadmap)
 * [Acknowledgements](#acknowledgements)
 * [License](#license)
@@ -59,13 +61,28 @@ by setting the following environment variables:
 
 `REDO_HISTORY_PATH`: The location of the history file which redo uses to source commands (defaults to HISTFILE)
 
-`REDO_EDITOR`: The editor you wan't to use when running commands like `redo edit` (defaults to EDITOR)
+`REDO_EDITOR`: The editor you want to use when running commands like `redo edit` (defaults to EDITOR)
+
+## Shortcuts
+
+Redo can be bind to a shortcut, so you can easily summon it without calling it directly.
+
+**zsh CTRL+e summons redo**:
+```zsh
+bindkey -s '^e' 'redo^M'
+```
+
+**bash CTRL+e summons redo**:
+```bash
+bind '"\C-e":"redo\n"'
+```
+
 
 ## Roadmap
 
 - Reordering of selected tasks
 - Easy listing/deletion of functions
-- Inline editting of shell functions
+- Inline editing of shell functions
 - Prebuilt binaries published as .deb .rpm .yum etc.
 
 ## Acknowledgements
