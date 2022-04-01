@@ -11,6 +11,7 @@ interactive way combine multiple commands from history in a single command.
 * [Installation](#installation)
     * [Prebuilt binaries](#prebuilt-binaries)
     * [Install from source](#install-from-source)
+* [Quickstart](#quickstart)
 * [Configuration](#configuration)
 * [Roadmap](#roadmap)
 * [Acknowledgements](#acknowledgements)
@@ -37,6 +38,15 @@ tar -xf <downloaded_archive> redo && sudo mv redo /usr/local/bin
 ```bash
 go install github.com/barthr/redo@latest
 ```
+
+## Quickstart
+
+redo contains a couple of commands, which can be used to create reusable functions.
+
+1. `redo` - Opens up the interactive window to create a new function
+2. `redo alias-file` - Prints the path to the functions file
+3. `redo edit` - Opens the functions file in your configured editor
+4. `redo help` - Prints a help message which includes information about all the commands
 
 ## Configuration
 
