@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/barthr/redo/config"
 	"github.com/barthr/redo/repository"
 	"github.com/barthr/redo/ui"
 	"github.com/charmbracelet/bubbles/list"
@@ -13,7 +14,7 @@ import (
 )
 
 var (
-	config = new(Config)
+	cfg = new(config.Config)
 )
 
 const (
@@ -30,56 +31,57 @@ Usage:
 
 Available Commands:
   help       	Prints out this help text. 
-  list 	     	Opens an interactive window to list and edit your existing aliases.
   alias-file 	Prints out the path to the alias file.
   edit 	     	Opens the alias file in your editor (default: %s).
 `
 )
 
 func main() {
-	config.FromEnv()
-	if err := config.EnsureAliasFileExists(); err != nil {
-		log.Fatalf("Failed to create alias file %s with error: %s", config.AliasPath, err)
+	cfg.FromEnv()
+	if err := cfg.EnsureAliasFileExists(); err != nil {
+		log.Fatalf("Failed to create alias file %s with error: %s", cfg.AliasPath, err)
 	}
 
-	repository.InitHistoryRepository(config.HistoryPath)
-	repository.InitAliasRepository(config.AliasPath)
+	repository.InitHistoryRepository(cfg.HistoryPath)
+	repository.InitAliasRepository(cfg.AliasPath)
 	defer repository.Close()
 
 	flag.Parse()
 
+	cfg.Validate()
+
 	if len(os.Args) > 1 {
 		switch os.Args[1] {
 		case "help":
-			fmt.Fprintf(os.Stdout, helpText, config.Editor)
+			fmt.Fprintf(os.Stdout, helpText, cfg.Editor)
 			os.Exit(0)
 		case "alias-file":
-			fmt.Println(config.AliasPath)
+			fmt.Println(cfg.AliasPath)
 			os.Exit(0)
 		case "edit":
 			openEditor()
 			os.Exit(0)
-		case "list":
-			//runTeaProgram(ui.NewListAliasComponent())
+		default:
+			log.Fatalf("Command: %s not found", os.Args[1])
 		}
-	}
+	} else {
+		history, err := repository.GetHistoryRepository().GetHistory()
+		if err != nil {
+			log.Fatalf("Failed fetching history: %v", err)
+		}
 
-	history, err := repository.GetHistoryRepository().GetHistory()
-	if err != nil {
-		log.Fatalf("Failed fetching history: %v", err)
-	}
+		var historyItems []list.Item
+		for _, historyItem := range history {
+			historyItems = append(historyItems, ui.NewHistoryItem(historyItem))
+		}
+		listComponent := ui.NewHistoryItemListComponent(historyItems)
 
-	var historyItems []list.Item
-	for _, historyItem := range history {
-		historyItems = append(historyItems, ui.NewHistoryItem(historyItem))
+		runTeaProgram(listComponent)
 	}
-	listComponent := ui.NewHistoryItemListComponent(historyItems)
-
-	runTeaProgram(listComponent)
 }
 
 func openEditor() {
-	cmd := exec.Command(config.Editor, config.AliasPath)
+	cmd := exec.Command(cfg.Editor, cfg.AliasPath)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	_ = cmd.Run()
