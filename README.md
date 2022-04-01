@@ -41,6 +41,12 @@ tar -xf <downloaded_archive> redo && sudo mv redo /usr/local/bin
 go install github.com/barthr/redo@latest
 ```
 
+After downloading add the following line to your ~/.bashrc or ~/.zshrc
+```bash
+source $(redo alias-file)
+```
+This will make sure that the aliases from redo are loaded on every shell session.
+
 ## Quickstart
 
 redo contains a couple of commands, which can be used to create reusable functions.
