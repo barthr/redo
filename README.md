@@ -3,7 +3,9 @@
 Redo is an command line application to easily create reusable functions in your own shell. Think of redo like an
 interactive way combine multiple commands from history in a single command.
 
-<img src="https://github.com/barthr/redo/blob/master/docs/demo.gif" width="80%" height="80%" />
+<p align="center">
+  <img src="https://github.com/barthr/redo/blob/master/docs/demo.gif" width="80%" height="80%" />
+</p>
 
 [comment]: <> (![demo]&#40;https://github.com/barthr/redo/blob/master/docs/demo.gif&#41;)
 
