@@ -1,13 +1,11 @@
 # Redo
 
-Redo is an command line application to easily create reusable functions in your own shell. Think of redo like an
+Redo is a command line application to easily create reusable functions in your own shell. Think of redo like an
 interactive way combine multiple commands from history in a single command.
 
 <p align="center">
-  <img src="https://github.com/barthr/redo/blob/master/docs/demo.gif" width="80%" height="80%" />
+  <img src="https://github.com/barthr/redo/blob/master/docs/demo.gif" width="90%" height="90%" />
 </p>
-
-[comment]: <> (![demo]&#40;https://github.com/barthr/redo/blob/master/docs/demo.gif&#41;)
 
 * [Features](#features)
 * [Installation](#installation)
@@ -15,6 +13,7 @@ interactive way combine multiple commands from history in a single command.
     * [Install from source](#install-from-source)
 * [Configuration](#configuration)
 * [Roadmap](#roadmap)
+* [Acknowledgements](#acknowledgements)
 * [License](#license)
 
 ## Features
@@ -58,6 +57,11 @@ by setting the following environment variables:
 - Easy listing/deletion of functions
 - Inline editting of shell functions
 - Prebuilt binaries published as .deb .rpm .yum etc.
+
+## Acknowledgements
+
+- [Bubbletea TUI framework](https://github.com/charmbracelet/bubbletea)
+- [Sh](https://github.com/mvdan/sh)
 
 ## License
 
