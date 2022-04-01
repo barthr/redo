@@ -1,15 +1,23 @@
-
 # Redo
 
-Redo is an command line application to easily create reusable functions in your own shell. Think of redo like an interactive way combine multiple commands from history in a single command.
+Redo is an command line application to easily create reusable functions in your own shell. Think of redo like an
+interactive way combine multiple commands from history in a single command.
 
 ![demo](https://github.com/barthr/redo/blob/master/docs/demo.gif)
+
+* [Features](#features)
+* [Installation](#installation)
+    * [Prebuilt binaries](#prebuilt-binaries)
+    * [Install from source](#install-from-source)
+* [Configuration](#configuration)
+* [Roadmap](#roadmap)
+* [License](#license)
+
 ## Features
 
 - Easily create reusable functions from shell history
 - Shell agnostic, can be used with ZSH, Bash etc.
 - Aliases are stored in a single file which can be put in version control
-
 
 ## Installation
 
@@ -21,7 +29,6 @@ Download one of the prebuilt binaries from: https://github.com/barthr/redo/relea
 tar -xf <downloaded_archive> redo && sudo mv redo /usr/local/bin
 ```
 
-
 ### Install from source
 
 ```bash
@@ -30,7 +37,8 @@ go install github.com/barthr/redo@latest
 
 ## Configuration
 
-Redo can mostly run without requiring any specific configuration, however it is possible to customize this configuration by setting the following environment variables:
+Redo can mostly run without requiring any specific configuration, however it is possible to customize this configuration
+by setting the following environment variables:
 
 `REDO_ALIAS_PATH`: The path where the alias file of redo is stored (defaults to aliases file in user config dir)
 
@@ -40,17 +48,12 @@ Redo can mostly run without requiring any specific configuration, however it is 
 
 `REDO_EDITOR`: The editor you wan't to use when running commands like `redo edit` (defaults to EDITOR)
 
-
-
-
-
 ## Roadmap
 
 - Reordering of selected tasks
 - Easy listing/deletion of functions
 - Inline editting of shell functions
 - Prebuilt binaries published as .deb .rpm .yum etc.
-
 
 ## License
 
