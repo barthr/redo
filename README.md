@@ -1,1 +1,1 @@
-[![asciicast](https://asciinema.org/a/dvoxvZOWtn5EnNM9bffTPAd4F.svg)](https://asciinema.org/a/dvoxvZOWtn5EnNM9bffTPAd4F)
+![demo](https://github.com/barthr/redo/blob/master/docs/demo.gif)
