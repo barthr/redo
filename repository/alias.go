@@ -32,6 +32,7 @@ var functionTemplate = template.Must(template.New("function").Parse(`
 
 type AliasRepository struct {
 	aliasFile *os.File
+	parser    *syntax.File
 }
 
 func Close() {
@@ -41,11 +42,12 @@ func Close() {
 }
 
 func InitAliasRepository(aliasFile string) {
-	file, err := os.OpenFile(aliasFile, os.O_RDWR, 0644)
+	file, err := os.OpenFile(aliasFile, os.O_RDWR|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatalf("Failed opening alias file: %s: %s", aliasFile, err)
 	}
 	aliasRepository = &AliasRepository{aliasFile: file}
+	aliasRepository.refreshParser()
 }
 
 func (ar *AliasRepository) Create(alias Alias) (string, error) {
@@ -61,6 +63,7 @@ func (ar *AliasRepository) Create(alias Alias) (string, error) {
 		"Alias":     alias,
 		"Timestamp": time.Now().Format(time.RFC3339),
 	})
+	ar.refreshParser()
 	return function, err
 }
 
@@ -92,12 +95,8 @@ func (ar *AliasRepository) Exists(aliasName string) (bool, error) {
 }
 
 func (ar *AliasRepository) functionDeclarations() ([]string, error) {
-	parser, err := syntax.NewParser().Parse(ar.aliasFile, "")
-	if err != nil {
-		return nil, err
-	}
 	var result []string
-	syntax.Walk(parser, func(node syntax.Node) bool {
+	syntax.Walk(ar.parser, func(node syntax.Node) bool {
 		switch node.(type) {
 		case *syntax.FuncDecl:
 			decl := node.(*syntax.FuncDecl)
@@ -106,4 +105,12 @@ func (ar *AliasRepository) functionDeclarations() ([]string, error) {
 		return true
 	})
 	return result, nil
+}
+
+func (ar *AliasRepository) refreshParser() {
+	var err error
+	ar.parser, err = syntax.NewParser().Parse(ar.aliasFile, "")
+	if err != nil {
+		panic(err)
+	}
 }
