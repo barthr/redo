@@ -68,15 +68,18 @@ by setting the following environment variables:
 Redo can be bind to a shortcut, so you can easily summon it without calling it directly.
 
 **zsh CTRL+e summons redo**:
+Put the following line in your zshrc file
+
 ```zsh
 bindkey -s '^e' 'redo^M'
 ```
 
 **bash CTRL+e summons redo**:
+Put the following line in your bashrc file or bash_profile
+
 ```bash
 bind '"\C-e":"redo\n"'
 ```
-
 
 ## Roadmap
 
