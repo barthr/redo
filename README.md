@@ -2,6 +2,7 @@
 
 ![Release](https://github.com/barthr/redo/actions/workflows/release.yml/badge.svg)
 ![CI](https://github.com/barthr/redo/actions/workflows/golangci-lint.yml/badge.svg)
+![Test](https://github.com/barthr/redo/actions/workflows/test.yml/badge.svg)
 
 Redo is a command line application to easily create reusable functions in your own shell. Think of redo like an
 interactive way combine multiple commands from your shell history in a single command. This can be handy for quickly
