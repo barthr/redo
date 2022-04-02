@@ -56,5 +56,5 @@ func (h HistoryItemDelegate) Render(w io.Writer, m list.Model, index int, listIt
 		}
 	}
 
-	fmt.Fprintf(w, fn(str))
+	fmt.Fprint(w, fn(str))
 }

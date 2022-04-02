@@ -97,10 +97,9 @@ func (ar *AliasRepository) Exists(aliasName string) (bool, error) {
 func (ar *AliasRepository) functionDeclarations() ([]string, error) {
 	var result []string
 	syntax.Walk(ar.parser, func(node syntax.Node) bool {
-		switch node.(type) {
+		switch node := node.(type) {
 		case *syntax.FuncDecl:
-			decl := node.(*syntax.FuncDecl)
-			result = append(result, decl.Name.Value)
+			result = append(result, node.Name.Value)
 		}
 		return true
 	})

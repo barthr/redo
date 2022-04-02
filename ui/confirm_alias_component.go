@@ -27,14 +27,14 @@ func newConfirmAliasComponent(selected []list.Item) tea.Model {
 	textInput.CharLimit = 156
 	textInput.Width = 20
 
-	return ConfirmAliasComponent{textInput: textInput, selected: selected}
+	return &ConfirmAliasComponent{textInput: textInput, selected: selected}
 }
 
-func (c ConfirmAliasComponent) Init() tea.Cmd {
+func (c *ConfirmAliasComponent) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (c ConfirmAliasComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (c *ConfirmAliasComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
@@ -56,7 +56,7 @@ func (c ConfirmAliasComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return c, cmd
 }
 
-func (c ConfirmAliasComponent) View() string {
+func (c *ConfirmAliasComponent) View() string {
 	if c.quit {
 		return ""
 	}
