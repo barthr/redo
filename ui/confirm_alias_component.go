@@ -3,7 +3,6 @@ package ui
 import (
 	"fmt"
 	"github.com/barthr/redo/repository"
-	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -16,18 +15,18 @@ type ConfirmAliasComponent struct {
 	textInput textinput.Model
 	err       error
 	finalized bool
-	selected  []list.Item
+	selected  []*HistoryItem
 	quit      bool
 }
 
-func newConfirmAliasComponent(selected []list.Item) tea.Model {
+func newConfirmAliasComponent() tea.Model {
 	textInput := textinput.New()
 	textInput.Placeholder = ""
 	textInput.Focus()
 	textInput.CharLimit = 156
 	textInput.Width = 20
 
-	return &ConfirmAliasComponent{textInput: textInput, selected: selected}
+	return &ConfirmAliasComponent{textInput: textInput, selected: selectionManager.items}
 }
 
 func (c *ConfirmAliasComponent) Init() tea.Cmd {
@@ -80,7 +79,7 @@ func (c *ConfirmAliasComponent) View() string {
 
 	var commands []string
 	for _, historyItem := range c.selected {
-		commands = append(commands, historyItem.(*HistoryItem).Command)
+		commands = append(commands, historyItem.Command)
 	}
 
 	var function string

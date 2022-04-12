@@ -18,8 +18,7 @@ var (
 )
 
 type HistoryItem struct {
-	Command  string
-	selected bool
+	Command       string
 }
 
 func NewHistoryItem(historyEntry string) *HistoryItem {
@@ -29,6 +28,10 @@ func NewHistoryItem(historyEntry string) *HistoryItem {
 
 func (h HistoryItem) FilterValue() string {
 	return h.Command
+}
+
+func (h *HistoryItem) isSelected() bool {
+	return selectionManager.Contains(h)
 }
 
 type HistoryItemDelegate struct{}
@@ -43,8 +46,8 @@ func (h HistoryItemDelegate) Render(w io.Writer, m list.Model, index int, listIt
 		return
 	}
 	var str string
-	if historyItem.selected {
-		str = selectedItemStyle.Render(fmt.Sprintf("%d. %s", index+1, historyItem.Command))
+	if historyItem.isSelected() {
+		str = selectedItemStyle.Render(fmt.Sprintf("%d. %s (%d)", index+1, historyItem.Command, selectionManager.IndexOf(historyItem)+1))
 	} else {
 		str = fmt.Sprintf("%d. %s", index+1, historyItem.Command)
 	}

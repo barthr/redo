@@ -23,6 +23,7 @@ func (e errMsg) Error() string { return e.err.Error() }
 type HistoryItemListComponent struct {
 	list     list.Model
 	quitting bool
+	selected map[int]*HistoryItem
 }
 
 func NewHistoryItemListComponent(items []list.Item) *HistoryItemListComponent {
@@ -40,7 +41,7 @@ func NewHistoryItemListComponent(items []list.Item) *HistoryItemListComponent {
 		}
 	}
 
-	return &HistoryItemListComponent{list: l}
+	return &HistoryItemListComponent{list: l, selected: map[int]*HistoryItem{}}
 }
 
 func (h HistoryItemListComponent) Init() tea.Cmd { return nil }
@@ -58,9 +59,14 @@ func (h HistoryItemListComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case " ":
 			item := h.list.SelectedItem().(*HistoryItem)
-			item.selected = !item.selected
+
+			if item.isSelected() {
+				selectionManager.Remove(item)
+			} else {
+				selectionManager.Add(item)
+			}
 		case "enter":
-			return newConfirmAliasComponent(h.selectedItems()), nil
+			return newConfirmAliasComponent(), nil
 		}
 	}
 
@@ -71,14 +77,4 @@ func (h HistoryItemListComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (h HistoryItemListComponent) View() string {
 	return "\n" + h.list.View()
-}
-
-func (h HistoryItemListComponent) selectedItems() []list.Item {
-	var result []list.Item
-	for _, item := range h.list.Items() {
-		if item.(*HistoryItem).selected {
-			result = append(result, item)
-		}
-	}
-	return result
 }
