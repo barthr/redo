@@ -66,7 +66,9 @@ func (h HistoryItemListComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				selectionManager.Add(item)
 			}
 		case "enter":
-			return newConfirmAliasComponent(), nil
+			if len(selectionManager.items) != 0 {
+				return newConfirmAliasComponent(), nil
+			}
 		}
 	}
 
