@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"errors"
 	"fmt"
 	"github.com/barthr/redo/repository"
 	"github.com/charmbracelet/bubbles/textinput"
@@ -10,6 +11,10 @@ import (
 
 var quitTextStyle = lipgloss.NewStyle().Margin(1, 0, 2, 2)
 var infoTextStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("170"))
+var warnTextStyle = lipgloss.NewStyle().
+	UnsetPadding().
+	UnsetMargins().
+	Foreground(lipgloss.Color("#ffa500"))
 
 type ConfirmAliasComponent struct {
 	textInput textinput.Model
@@ -17,9 +22,10 @@ type ConfirmAliasComponent struct {
 	finalized bool
 	selected  []*HistoryItem
 	quit      bool
+	function  string
 }
 
-func newConfirmAliasComponent() tea.Model {
+func newConfirmAliasComponent() *ConfirmAliasComponent {
 	textInput := textinput.New()
 	textInput.Placeholder = ""
 	textInput.Focus()
@@ -43,38 +49,33 @@ func (c *ConfirmAliasComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			c.quit = true
 			return c, tea.Quit
 		case tea.KeyEnter:
-			c.finalized = true
-			return c, tea.Quit
+			return c, c.createNewFunction
 		}
 	case errMsg:
 		c.err = msg
+		c.textInput.Focus()
 		return c, nil
+	case functionMsg:
+		c.finalized = true
+		c.function = string(msg)
+		return c, tea.Quit
 	}
 
 	c.textInput, cmd = c.textInput.Update(msg)
 	return c, cmd
 }
 
-func (c *ConfirmAliasComponent) View() string {
-	if c.quit {
-		return ""
-	}
-	if !c.finalized {
-		return fmt.Sprintf(
-			"What’s the name of the alias?\n\n%s\n\n%s",
-			c.textInput.View(),
-			"(esc to quit)",
-		) + "\n"
-	}
+type functionMsg string
 
+func (c *ConfirmAliasComponent) createNewFunction() tea.Msg {
 	aliasName := c.textInput.Value()
 	if aliasName == "" || len(c.selected) == 0 {
-		return quitTextStyle.Render("Can't add empty alias or empty commands")
+		return errMsg{err: errors.New("can't add empty alias or empty commands"), aliasName: aliasName}
 	}
 
 	exists, err := repository.GetAliasRepository().Exists(aliasName)
 	if err == nil && exists {
-		return quitTextStyle.Render("Sorry that aliasName already exists: " + aliasName)
+		return errMsg{err: fmt.Errorf("sorry that aliasName already exists: " + aliasName), aliasName: aliasName}
 	}
 
 	var commands []string
@@ -83,12 +84,40 @@ func (c *ConfirmAliasComponent) View() string {
 	}
 
 	var function string
-	function, c.err = repository.GetAliasRepository().Create(repository.Alias{
+	function, err = repository.GetAliasRepository().Create(repository.Alias{
 		Name:     aliasName,
 		Commands: commands,
 	})
+	if err != nil {
+		return errMsg{err, aliasName}
+	}
+	return functionMsg(function)
+}
 
-	infoText := infoTextStyle.Render(fmt.Sprintf("Successfully added aliasName: %s\nPlease source your alias file to make your alias active in the current shell \n\n$ source $(redo alias-file)", aliasName))
-	// source the bash function
-	return quitTextStyle.Render(fmt.Sprintf("%s\n %s", infoText, function))
+func (c *ConfirmAliasComponent) View() string {
+	aliasName := c.textInput.Value()
+	if c.quit {
+		return ""
+	}
+
+	var result string
+	if c.err != nil {
+		result += warnTextStyle.Render(
+			fmt.Sprintf("Something failed when trying to create the alias with name %s: %s", c.err.(errMsg).aliasName, c.err.Error()),
+		)
+	}
+
+	if !c.finalized {
+		result += fmt.Sprintf(
+			"\n\nWhat’s the name of the alias?\n\n%s\n\n%s",
+			c.textInput.View(),
+			"(esc to quit)",
+		) + "\n"
+
+		return result
+	}
+
+	infoText := infoTextStyle.Render(fmt.Sprintf("Successfully added alias with name: %s\nPlease source your alias file to make your alias active in the current shell \n\n$ source $(redo alias-file)", aliasName))
+
+	return quitTextStyle.Render(fmt.Sprintf("%s\n %s", infoText, c.function))
 }

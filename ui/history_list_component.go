@@ -16,7 +16,10 @@ var (
 	titleStyle = lipgloss.NewStyle().MarginLeft(2)
 )
 
-type errMsg struct{ err error }
+type errMsg struct {
+	err       error
+	aliasName string
+}
 
 func (e errMsg) Error() string { return e.err.Error() }
 
