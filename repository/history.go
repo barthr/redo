@@ -3,6 +3,7 @@ package repository
 import (
 	"bufio"
 	"os"
+	"strings"
 )
 
 var (
@@ -33,7 +34,8 @@ func (repository *HistoryRepository) GetHistory() ([]string, error) {
 
 	var result []string
 	for fileScanner.Scan() {
-		result = append(result, fileScanner.Text())
+		parsedLine := strings.Split(fileScanner.Text(), ";")
+		result = append(result, parsedLine[len(parsedLine)-1])
 	}
 	// reverse array
 	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {

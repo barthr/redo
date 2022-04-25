@@ -1,0 +1,3 @@
+: 1650622819:0;htop
+: 1650622898:0;echo "test"
+: 1650622911:0;docker system prune

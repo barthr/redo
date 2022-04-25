@@ -6,7 +6,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"io"
-	"strings"
 )
 
 var (
@@ -18,12 +17,11 @@ var (
 )
 
 type HistoryItem struct {
-	Command       string
+	Command string
 }
 
 func NewHistoryItem(historyEntry string) *HistoryItem {
-	historyParts := strings.Split(historyEntry, ";")
-	return &HistoryItem{Command: historyParts[len(historyParts)-1]}
+	return &HistoryItem{Command: historyEntry}
 }
 
 func (h HistoryItem) FilterValue() string {
