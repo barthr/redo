@@ -46,9 +46,11 @@ go install github.com/barthr/redo@latest
 ```
 
 *After downloading add the following line to your* `~/.bashrc` or `~/.zshrc`
+
 ```bash
 source "$(redo alias-file)"
 ```
+
 This will make sure that the aliases from redo are loaded on every shell session.
 
 ## Quickstart
@@ -69,9 +71,10 @@ by setting the following environment variables:
 
 `REDO_CONFIG_PATH`: The config path for redo (defaults to user config dir)
 
-`REDO_HISTORY_PATH`: The location of the history file which redo uses to source commands (defaults to HISTFILE)
+`REDO_HISTORY_PATH`: The location of the history file which redo uses to source commands (*defaults to HISTFILE **if it is
+exported**)
 
-`REDO_EDITOR`: The editor you want to use when running commands like `redo edit` (defaults to EDITOR)
+`REDO_EDITOR`: The editor you want to use when running commands like `redo edit` (defaults to EDITOR **if it is exported**)
 
 ## Shortcuts
 
