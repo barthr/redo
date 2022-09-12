@@ -96,7 +96,7 @@ bind '"\C-e":"redo\n"'
 
 ## Roadmap
 
-- Reordering of selected tasks
+-[x] Reordering of selected tasks
 - Easy listing/deletion of functions
 - Inline editing of shell functions
 - Prebuilt binaries published as .deb .rpm .yum etc.
