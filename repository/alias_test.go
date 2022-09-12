@@ -2,12 +2,12 @@ package repository
 
 import (
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+    "os"
 	"testing"
 )
 
 func TestAliasRepository_CreateInvalidName(t *testing.T) {
-	file, err := ioutil.TempFile("", "alias_test")
+	file, err := os.CreateTemp("", "alias_test")
 	assert.NoError(t, err)
 
 	InitAliasRepository(file.Name())
@@ -22,7 +22,7 @@ func TestAliasRepository_CreateInvalidName(t *testing.T) {
 }
 
 func TestAliasRepository_CreateValidName(t *testing.T) {
-	file, err := ioutil.TempFile("", "alias_test")
+	file, err := os.CreateTemp("", "alias_test")
 	assert.NoError(t, err)
 
 	InitAliasRepository(file.Name())
