@@ -61,7 +61,10 @@ func (h HistoryItemListComponent) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return h, tea.Quit
 
 		case " ":
-			item := h.list.SelectedItem().(*HistoryItem)
+			item, ok := h.list.SelectedItem().(*HistoryItem)
+			if !ok {
+				break
+			}
 
 			if item.isSelected() {
 				selectionManager.Remove(item)
