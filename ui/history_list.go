@@ -10,7 +10,7 @@ import (
 
 var (
 	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
-	currentItemStyle  = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
+	currentItemStyle  = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170")).Width(150)
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#00ff00"))
 	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
 	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
@@ -52,8 +52,9 @@ func (h HistoryItemDelegate) Render(w io.Writer, m list.Model, index int, listIt
 
 	fn := itemStyle.Render
 	if index == m.Index() {
-		fn = func(s string) string {
-			return currentItemStyle.Render("> " + s)
+		fn = func(s ...string) string {
+			var str = []string{"> "}
+			return currentItemStyle.Render(append(str, s...)...)
 		}
 	}
 
