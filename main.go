@@ -3,18 +3,23 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
+	"os/exec"
+
 	"github.com/barthr/redo/config"
 	"github.com/barthr/redo/repository"
 	"github.com/barthr/redo/ui"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"log"
-	"os"
-	"os/exec"
 )
 
 var (
 	cfg = new(config.Config)
+
+	version string
+
+	date string
 )
 
 const (
@@ -61,6 +66,8 @@ func main() {
 		case "edit":
 			openEditor()
 			os.Exit(0)
+		case "version":
+			fmt.Println("Redo was built on", date, "with version", version)
 		default:
 			log.Fatalf("Command: %s not found", os.Args[1])
 		}
