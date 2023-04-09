@@ -95,7 +95,7 @@ func openEditor() {
 }
 
 func runTeaProgram(root tea.Model) {
-	if err := tea.NewProgram(root).Start(); err != nil {
+	if _, err := tea.NewProgram(root).Run(); err != nil {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}
