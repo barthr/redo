@@ -23,4 +23,6 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add install.sh
           git commit -m "Set <tag> in install script to $TAG_NAME"
-          git push
+          
+          # Push the changes directly to the master branch
+          git push origin HEAD:master
