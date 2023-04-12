@@ -3,7 +3,7 @@
 # Set variables
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)
-TAG_WITHOUT_VERSION_PREFIX=$(echo "<tag>" | sed 's/^v//')
+TAG_WITHOUT_VERSION_PREFIX=$(echo "v0.8.4" | sed 's/^v//')
 
 if [ "$OS" = "darwin" ]; then
   if [ "$ARCH" = "arm64" ]; then
@@ -22,7 +22,7 @@ else
   exit 1
 fi
 
-RELEASE_URL="https://github.com/barthr/redo/releases/download/<tag>/${BINARY_NAME}"
+RELEASE_URL="https://github.com/barthr/redo/releases/download/v0.8.4/${BINARY_NAME}"
 INSTALL_PATH="/usr/local/bin"
 
 # Download the binary
