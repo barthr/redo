@@ -33,9 +33,16 @@ re-doing multiple commands for example deleting and starting a new docker contai
 
 ### Prebuilt binaries
 
+Using the provided installation script
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/barthr/redo/master/install.sh)
+```
+
 Download one of the prebuilt binaries from: https://github.com/barthr/redo/releases and run the following command
 
 ```bash
+
 tar -xf <downloaded_archive> redo && sudo mv redo /usr/local/bin
 ```
 
@@ -71,10 +78,12 @@ by setting the following environment variables:
 
 `REDO_CONFIG_PATH`: The config path for redo (defaults to user config dir)
 
-`REDO_HISTORY_PATH`: The location of the history file which redo uses to source commands (*defaults to HISTFILE **if it is
+`REDO_HISTORY_PATH`: The location of the history file which redo uses to source commands (*defaults to HISTFILE **if it
+is
 exported**)
 
-`REDO_EDITOR`: The editor you want to use when running commands like `redo edit` (defaults to EDITOR **if it is exported**)
+`REDO_EDITOR`: The editor you want to use when running commands like `redo edit` (defaults to EDITOR **if it is exported
+**)
 
 ## Shortcuts
 

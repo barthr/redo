@@ -1,0 +1,26 @@
+name: Set Tag in Install Script
+
+on:
+  release:
+    types: [ created ]
+
+jobs:
+  set-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set Tag in Install Script
+        run: |
+          # Get the tag name from the release event payload
+          TAG_NAME=$(echo ${{ github.event.release.tag_name }})
+
+          # Replace <tag> in the install script with the tag name
+          sed -i "s/<tag>/$TAG_NAME/g" install.sh
+
+          # Commit the changes
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add install.sh
+          git commit -m "Set <tag> in install script to $TAG_NAME"
+          git push
